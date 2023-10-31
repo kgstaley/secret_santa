@@ -14,7 +14,7 @@ struct Cli {
     // the path to to file to read
     path: PathBuf,
 }
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 struct Participant {
     pub index: usize,
     pub name: String,
@@ -89,4 +89,29 @@ fn make_matches(participants: &Vec<Participant>) -> Vec<Match> {
     matches
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn all_participants_accounted_for() {
+        // build the participants vec
+        let mut participants: Vec<Participant> = vec![];
+        for n in 1..20 {
+            participants.push(Participant {
+                index: n,
+                name: uuid::Uuid::new_v4().to_string(),
+            })
+        }
+        // generate matches
+        let matches = make_matches(&participants);
+        let mut receivers = matches
+            .into_iter()
+            .map(|p| p.receiver)
+            .collect::<Vec<Participant>>();
+        receivers.sort_by(|a, b| a.index.cmp(&b.index));
+        // assert that all participants are accounted for in match
+        assert_eq!(participants.len(), receivers.len());
+        assert_eq!(participants, receivers);
+    }
 }
