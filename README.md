@@ -5,13 +5,14 @@ Works by reading contents from a local `.txt` file (newline deliminated) and ite
 
 # How to run
 ```
-    cargo run -- <file_path>
+cargo run -- <file_path>
 ```
 
 # Examples
 
 Your `.txt` file may look something like this:
 ```
+# secret_santa.txt
 Bob
 Janet
 Sally
