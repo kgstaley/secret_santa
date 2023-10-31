@@ -26,4 +26,4 @@ cargo run -- /User/username/PATH/TO/FILE.txt
 ```
 
 # todo
-- write some tests
+- ~~write some tests~~
