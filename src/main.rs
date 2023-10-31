@@ -20,10 +20,22 @@ struct Participant {
     pub name: String,
 }
 
-#[derive(Debug, Clone)]
+impl Participant {
+    pub fn new(index: usize, name: String) -> Self {
+        Self { index, name }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 struct Match {
     giver: Participant,
     receiver: Participant,
+}
+
+impl Match {
+    pub fn new(giver: Participant, receiver: Participant) -> Self {
+        Self { giver, receiver }
+    }
 }
 
 fn main() -> Result<()> {
