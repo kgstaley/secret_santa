@@ -24,3 +24,6 @@ And you would run the tool like so:
 ```
 cargo run -- /User/username/PATH/TO/FILE.txt
 ```
+
+# todo
+- write some tests
