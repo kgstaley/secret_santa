@@ -40,45 +40,53 @@ impl Match {
 
 fn main() -> Result<()> {
     let args = Cli::parse();
+    let participants = build_participants_from_file(args.path)?;
+    let matches = make_matches(&participants);
 
-    let f = File::open(&args.path).expect("could not read file");
+    println!("\n=== matches are in! ===\n");
+    matches
+        .clone()
+        .into_iter()
+        .for_each(|m| println!("matched: {:?}\n", m));
+    Ok(())
+}
+
+fn build_participants_from_file(path: PathBuf) -> Result<Vec<Participant>> {
+    let f = File::open(&path).expect("could not read file");
     let reader = BufReader::new(f);
 
-    let mut matches: Vec<Match> = vec![];
     let mut participants: Vec<Participant> = vec![];
     let mut n = 1;
     for line in reader.lines() {
         let content = line?;
-        let participant = Participant {
-            index: n,
-            name: content,
-        };
+        let participant = Participant::new(n, content);
         participants.push(participant);
         n += 1;
     }
 
-    let mut remaining_pool = participants.clone();
-    for p in &participants {
-        if let Some(target) = remaining_pool.clone().choose(&mut thread_rng()) {
-            if p == target {
-                continue;
-            } else {
-                // create the match and append to matches
-                let new_match = Match {
-                    giver: p.clone(),
-                    receiver: target.clone(),
-                };
-                matches.push(new_match);
-                // remove target from remaining pool
-                remaining_pool.retain(|item| !item.eq(target));
+    Ok(participants)
+}
+
+fn make_matches(participants: &Vec<Participant>) -> Vec<Match> {
+    let mut matches: Vec<Match> = vec![];
+    let mut remaining_match_pool = participants.clone();
+    // keep iterating while there are still matches remaining in pool
+    while remaining_match_pool.len() > 0 {
+        for p in participants {
+            if let Some(target) = remaining_match_pool.clone().choose(&mut thread_rng()) {
+                if p == target {
+                    continue;
+                } else {
+                    // create the match and append to matches
+                    let new_match = Match::new(p.clone(), target.clone());
+                    matches.push(new_match);
+                    // remove target from remaining pool
+                    remaining_match_pool.retain(|item| !item.eq(target));
+                }
             }
         }
     }
-
-    println!("\n=== matches are in! ===\n");
     matches
-        .into_iter()
-        .for_each(|m| println!("matched: {:?}\n", m));
+}
 
-    Ok(())
 }
