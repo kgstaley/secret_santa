@@ -6,8 +6,8 @@ use eyre::Result;
 mod matcher;
 mod participant;
 
-use crate::matcher::make_matches;
-use crate::participant::build_participants_from_file;
+use crate::matcher::{Match, Matcher};
+use crate::participant::{Participant, BuildFromFile};
 
 // Search for a pattern in the file and display the lines that contain it
 #[derive(Parser)]
@@ -18,8 +18,8 @@ struct Cli {
 
 fn main() -> Result<()> {
     let args = Cli::parse();
-    let participants = build_participants_from_file(args.path)?;
-    let matches = make_matches(&participants);
+    let participants = Participant::build_participants_from_file(args.path)?;
+    let matches = Match::make_matches(&participants);
 
     println!("\n=== matches are in! ===\n");
     matches
@@ -40,13 +40,10 @@ mod tests {
         // build the participants vec
         let mut participants: Vec<Participant> = vec![];
         for n in 1..20 {
-            participants.push(Participant {
-                index: n,
-                name: uuid::Uuid::new_v4().to_string(),
-            })
+            participants.push(Participant::new(n, uuid::Uuid::new_v4().to_string(), None))
         }
         // generate matches
-        let matches = make_matches(&participants);
+        let matches = Match::make_matches(&participants);
         let mut receivers = matches
             .into_iter()
             .map(|p| p.receiver)
