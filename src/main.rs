@@ -6,7 +6,7 @@ use eyre::Result;
 mod matcher;
 mod participant;
 
-use crate::matcher::{Match, Matcher};
+use crate::matcher::{Match, MakeMatches};
 use crate::participant::{Participant, BuildFromFile};
 
 // Search for a pattern in the file and display the lines that contain it

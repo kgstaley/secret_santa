@@ -14,11 +14,11 @@ impl Match {
     }
 }
 
-pub trait Matcher {
+pub trait MakeMatches {
     fn make_matches(participants: &Vec<Participant>) -> Vec<Match>;
 }
 
-impl Matcher for Match {
+impl MakeMatches for Match {
     fn make_matches(participants: &Vec<Participant>) -> Vec<Match> {
         let mut matches: Vec<Match> = vec![];
         let mut remaining_match_pool = participants.clone();
