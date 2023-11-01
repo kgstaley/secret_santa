@@ -19,11 +19,11 @@ impl Participant {
 }
 
 pub trait BuildFromFile {
-    fn build_participants_from_file(path: PathBuf) -> Result<Vec<Participant>>;
+    fn build_from_file(path: PathBuf) -> Result<Vec<Participant>>;
 }
 
 impl BuildFromFile for Participant {
-    fn build_participants_from_file(path: PathBuf) -> Result<Vec<Participant>> {
+    fn build_from_file(path: PathBuf) -> Result<Vec<Participant>> {
         let f = File::open(&path).expect("could not read file");
         let reader = BufReader::new(f);
 

@@ -18,7 +18,7 @@ struct Cli {
 
 fn main() -> Result<()> {
     let args = Cli::parse();
-    let participants = Participant::build_participants_from_file(args.path)?;
+    let participants = Participant::build_from_file(args.path)?;
     let matches = Match::make_matches(&participants);
 
     println!("\n=== matches are in! ===\n");
