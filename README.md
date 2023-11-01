@@ -27,3 +27,4 @@ cargo run -- /User/username/PATH/TO/FILE.txt
 
 # todo
 - ~~write some tests~~
+- add SMTP email sending to participants?
